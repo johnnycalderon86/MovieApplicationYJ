@@ -4,6 +4,6 @@
     <string name="movie_details">Movie Trivia</string>
 
     <string name="title"></string>
-    <string name="bad_search">Movie Not Found: Here is a movie to watch</string>
+    <string name="bad_search">Movie not found</string>
     <string name="no_details">Search Contains No Data</string>
 </resources>
