@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(){
 
 
 
-    private  val API_KEY= "53a89cbb"
+    private  val apiKey= BuildConfig.GoogleSecAPIKEY    
     //--------------------------Disposables Variable //Todo: Learn what CompositeDisposable class does
     val disposables = CompositeDisposable()
 
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity(){
                 movieRatingStarVector.visibility = View.VISIBLE
                 badMovieImage.visibility = View.GONE
                 ifEmptyTextView.visibility = View.GONE
-                service.getCurrentMovieData(API_KEY, movieNameSearch)
+                service.getCurrentMovieData(apiKey, movieNameSearch)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
