@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.androidnetworking.interceptors.HttpLoggingInterceptor
@@ -24,9 +25,9 @@ class MainActivity : AppCompatActivity(){
 
 
 
-    private  val apiKey= BuildConfig.GoogleSecAPIKEY    
+    private  val apiKey= BuildConfig.GoogleSecAPIKEY
     //--------------------------Disposables Variable //Todo: Learn what CompositeDisposable class does
-    val disposables = CompositeDisposable()
+    private val disposables = CompositeDisposable()
 
     override fun onDestroy() {
         disposables.dispose()
@@ -50,12 +51,11 @@ class MainActivity : AppCompatActivity(){
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-
+//---------------------------------------------------------------------------------------SERVICE
         val service = retrofit.create(MovieService::class.java)
         //-----------------------------------------------------------------------------------Getting all the UI elements to display Data
         val button = findViewById<FloatingActionButton>(R.id.search_movie_button)
         val editText = findViewById<EditText>(R.id.searchbar_movie)
-
         val movieTitle = findViewById<TextView>(R.id.movieTitle)
         val moviePlot = findViewById<TextView>(R.id.moviePlot)
         val movieYear = findViewById<TextView>(R.id.movieYear)
@@ -69,43 +69,26 @@ class MainActivity : AppCompatActivity(){
         val badmovieUrl = "https://m.media-amazon.com/images/M/MV5BMTE5MTYxMDg5NV5BMl5BanBnXkFtZTYwNjc5MzQ3._V1_SX300.jpg"
         var movieRating = findViewById<TextView>(R.id.movieIMBDrating)
         val movieRatingStarVector = findViewById<ImageView>(R.id.movieRatingStar)
+        val displayMovieDetails = findViewById<ScrollView>(R.id.displayMovieScrollView)
+        val noDisplayMovieDetails = findViewById<ScrollView>(R.id.displayMovieNotFoundScrollView)
 //------------------------------------------------------------------------------------BUTTON onClickListener
         button.setOnClickListener {
             var movieNameSearch = editText.text.toString()
-
-
             if (movieNameSearch.isEmpty()) {
-                ifEmptyTextView.visibility = View.VISIBLE
-                badMovieImage.visibility = View.VISIBLE
+                noDisplayMovieDetails.visibility = View.VISIBLE
                 Picasso.get().load(badmovieUrl).into(badMovieSearch)
             }
-
             else {
-
                 movieRatingStarVector.visibility = View.VISIBLE
-                badMovieImage.visibility = View.GONE
-                ifEmptyTextView.visibility = View.GONE
+                noDisplayMovieDetails.visibility =View.GONE
                 service.getCurrentMovieData(apiKey, movieNameSearch)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                         {
-
                             if(it.title == null ){
-                                movieRatingStarVector.visibility = View.GONE
-                                movieTitle.visibility = View.GONE
-                                movieDirector.visibility = View.GONE
-                                moviePlot.visibility = View.GONE
-                                movieYear.visibility = View.GONE
-                                movieActors.visibility = View.GONE
-                                movieRating.visibility = View.GONE
-                                movieImage.visibility = View.GONE
-                                ifEmptyTextView.visibility = View.VISIBLE
-                                badMovieImage.visibility = View.VISIBLE
+                                noDisplayMovieDetails.visibility =View.VISIBLE
                                 Picasso.get().load(badmovieUrl).into(badMovieSearch)
-
-
-
                             } else {
                                 movieTitle.text = it.title
                                 moviePlot.text = it.plot
@@ -116,14 +99,8 @@ class MainActivity : AppCompatActivity(){
                                 movieRating.text = "IMDB \n${it.imdbRating}/10"
 
                                 Picasso.get().load(movieUrl).into(movieImage)
-                                movieRatingStarVector.visibility = View.VISIBLE
-                                movieTitle.visibility = View.VISIBLE
-                                movieDirector.visibility = View.VISIBLE
-                                moviePlot.visibility = View.VISIBLE
-                                movieYear.visibility = View.VISIBLE
-                                movieActors.visibility = View.VISIBLE
-                                movieRating.visibility = View.VISIBLE
-                                movieImage.visibility = View.VISIBLE
+//
+                                displayMovieDetails.visibility = View.VISIBLE
                             }
 
                         },
@@ -141,3 +118,5 @@ class MainActivity : AppCompatActivity(){
 
     }
 }
+
+// 1: Simplify the layout by adding a scrollview thats displays
