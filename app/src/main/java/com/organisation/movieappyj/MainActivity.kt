@@ -128,6 +128,7 @@ class MainActivity : AppCompatActivity() {
                 var movieNameSearch = editText.text.toString()
                 if (movieNameSearch.isEmpty()) {
                     noDisplayMovieDetails.visibility = View.VISIBLE
+                    displayMovieDetails.visibility =View.GONE
                     Picasso.get().load(badmovieUrl).into(badMovieSearch)
                 } else {
                     movieRatingStarVector.visibility = View.VISIBLE
