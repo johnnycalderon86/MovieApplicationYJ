@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
 //------------------------------------------------------------------------------------BUTTON ONClickListener
             button.setOnClickListener {
                 posterHomeImageView.visibility =View.GONE
-
+                monitor.cancel()
                 var movieNameSearch = editText.text.toString()
                 if (movieNameSearch.isEmpty()) {
                     noDisplayMovieDetails.visibility = View.VISIBLE
